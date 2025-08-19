@@ -3,6 +3,9 @@ import { ConvexClient } from "convex/browser";
 const convex = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 const subscriptions = new Set<string>();
+
+const deploymentUrl = process.env.NODE_ENV === 'production' ? 'https://convex-cache-listener.vercel.app' : 'http://localhost:3000';
+
 Bun.serve({
     port: 3001,
     // `routes` requires Bun v1.2.3+
@@ -20,7 +23,7 @@ Bun.serve({
           convex.onUpdate(functionName, argsJSON, () => {
             console.log('Invalidating cache for', key);
             try {
-              fetch(`http://localhost:3000/api/invalidate?key=${key}`, {
+              fetch(`${deploymentUrl}/api/invalidate?key=${key}`, {
                 method: "POST",
               });
             } catch (error) {

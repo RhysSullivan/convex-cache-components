@@ -9,9 +9,10 @@ export async function preloadQueryCached<Query extends FunctionReference<"query"
     ...args: ArgsAndOptions<Query, NextjsOptions>
   ): Promise<{ preloaded: Preloaded<Query>, renderedAt: string }> {
     "use cache"
+    const listenerUrl = process.env.NODE_ENV === 'production' ? 'https://convex-cache-listener.vercel.app' : 'http://localhost:3001';
       const argsJSON = convexToJson(args[0] ?? {});
       const key = Buffer.from(`${functionName}:${JSON.stringify(argsJSON)}`).toString('base64');
-      await fetch(`http://localhost:3001/api/cache/subscribe`, {
+      await fetch(`${listenerUrl}/api/cache/subscribe`, {
         method: "POST",
         body: JSON.stringify({ key, argsJSON, functionName }),
       });
