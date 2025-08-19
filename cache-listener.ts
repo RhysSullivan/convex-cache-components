@@ -4,7 +4,7 @@ const convex = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 const subscriptions = new Set<string>();
 
-const deploymentUrl = process.env.NODE_ENV === 'production' ? 'https://convex-cache-listener.vercel.app' : 'http://localhost:3000';
+const deploymentUrl = process.env.NODE_ENV === 'production' ? 'https://convex-cache-components.vercel.app/' : 'http://localhost:3000';
 
 Bun.serve({
     port: 3001,
