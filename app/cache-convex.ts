@@ -9,7 +9,7 @@ export async function preloadQueryCached<Query extends FunctionReference<"query"
     ...args: ArgsAndOptions<Query, NextjsOptions>
   ): Promise<{ preloaded: Preloaded<Query>, renderedAt: string }> {
     "use cache"
-    const listenerUrl = process.env.NODE_ENV === 'production' ? 'https://convex-cache-listener.vercel.app' : 'http://localhost:3001';
+    const listenerUrl = process.env.NODE_ENV === 'production' ? 'https://convex-cache-components-production.up.railway.app' : 'http://localhost:3001';
       const argsJSON = convexToJson(args[0] ?? {});
       const key = Buffer.from(`${functionName}:${JSON.stringify(argsJSON)}`).toString('base64');
       await fetch(`${listenerUrl}/api/cache/subscribe`, {
@@ -18,7 +18,7 @@ export async function preloadQueryCached<Query extends FunctionReference<"query"
       });
       
       const preloaded = await preloadQuery(functionName, ...args);
-      console.log('caching', key);
+      console.log('Subscribed to updates for', key, 'at', listenerUrl);
       cacheTag(key);
       cacheLife('weeks')
       const renderedAt = new Date().toISOString();

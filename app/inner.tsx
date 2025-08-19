@@ -3,22 +3,6 @@
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useState } from "react";
-export function FetchPageFromClientAndShowHeaders(){
-  const [headers, setHeaders] = useState<Record<string, string>>({});
-  // button to fetch the page from the server and show the headers
-  return (
-    <div>
-      <button onClick={() => {
-        fetch('/').then(res => {
-          setHeaders(Object.fromEntries(res.headers.entries()));
-        });
-      }}>Fetch Page</button>
-      <code>
-        <pre>{JSON.stringify(headers, null, 2)}</pre>
-      </code>
-    </div>
-  )
-}
 
 const hexCodes = [
   "#FF5733",
@@ -32,6 +16,35 @@ const hexCodes = [
   "#FFD700",
   "#A9A9A9",
 ];
+const messages = [
+  "Hey, how's it going?",
+  "Did you see the news today?",
+  "Don't forget to pick up milk!",
+  "I'm running a bit late, be there soon.",
+  "What's for dinner?",
+  "Just wanted to say hi!",
+  "Having a great time!",
+  "Can we reschedule for tomorrow?",
+  "That's hilarious! 😂",
+  "See you later alligator!"
+];
+
+function FakeMessage(props: {
+  seed: number;
+}){
+
+
+
+ // circle avatar + message
+  return <div className="flex flex-row gap-4">  
+    <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
+    style={{ backgroundColor: hexCodes[props.seed % hexCodes.length] }}
+    />
+    <div className="">
+      {messages[props.seed % messages.length]}
+    </div>
+  </div>
+}
 
 export default function Home({
   preloaded,
@@ -52,14 +65,15 @@ export default function Home({
     <div className="flex flex-row gap-8 w-full justify-between p-8">
       <div className="flex flex-col gap-4 bg-slate-200 dark:bg-slate-800 p-4 rounded-md">
         <h2 className="text-xl font-bold">{title}</h2>
-        <p className="text-sm text-gray-500">Rendered at {renderedAt}</p>
+        <p className="text-sm">Rendered at {renderedAt}</p>
+        <span>You are seeing server side cached data that is then hydrateded & updated on the client</span>
         <button
           className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
           onClick={() => {
-            void addNumber({ value: Math.floor(Math.random() * 10) });
+            void addNumber({ value: Math.floor(Math.random() * 1000) + 1 });
           }}
         >
-          Add a random square
+          Add a message
         </button>
         <button
           className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
@@ -73,7 +87,7 @@ export default function Home({
             }
           }}
         >
-          Remove a random number
+          Remove a random message
         </button>
         <button
           className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
@@ -88,15 +102,7 @@ export default function Home({
           {reloading ? "Reloading..." : "Reload page"}
         </button>
         {numbers?.numbers.map((number) => (
-          <div key={number._id}
-          // random background color based on number value, rectanges
-          style={{
-            backgroundColor: hexCodes[number.value % hexCodes.length],
-            width: '100%',
-            height: '100px',
-          }}
-
-          />
+          <FakeMessage key={number._id} seed={number.value} />
         ))}
       </div>
     </div>
