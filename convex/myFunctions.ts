@@ -17,6 +17,8 @@ export const listNumbers = query({
       .query("numbers")
       .order("desc")
       .take(args.count);
+
+      
     return {
       viewer: (await ctx.auth.getUserIdentity())?.name ?? null,
       numbers: {

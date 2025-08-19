@@ -8,7 +8,11 @@ export default async function ServerPage() {
     count: 10,
   });
 
+  
   return (
-      <Home preloaded={preloaded} />
+      <Home preloaded={preloaded.preloaded}
+        title={`Server cached data being kept in sync with client via cache invalidation from use cache`}
+        renderedAt={preloaded.renderedAt}
+      />
   );
 }

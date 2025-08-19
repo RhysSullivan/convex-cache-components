@@ -2,6 +2,7 @@ import { ConvexClient } from "convex/browser";
 
 const convex = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
+const subscriptions = new Set<string>();
 Bun.serve({
     port: 3001,
     // `routes` requires Bun v1.2.3+
@@ -14,6 +15,7 @@ Bun.serve({
         POST: async req => {
           const body = await req.json();
           const { key, argsJSON, functionName } = body;
+          subscriptions.add(key);
           console.log('Subscribing to updates for', key);
           convex.onUpdate(functionName, argsJSON, () => {
             console.log('Invalidating cache for', key);

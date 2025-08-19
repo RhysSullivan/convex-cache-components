@@ -7,7 +7,7 @@ import { unstable_cacheLife as cacheLife } from "next/cache";
 export async function preloadQueryCached<Query extends FunctionReference<"query">>(
     functionName: string,
     ...args: ArgsAndOptions<Query, NextjsOptions>
-  ): Promise<Preloaded<Query>> {
+  ): Promise<{ preloaded: Preloaded<Query>, renderedAt: string }> {
     "use cache"
       const argsJSON = convexToJson(args[0] ?? {});
       const key = Buffer.from(`${functionName}:${JSON.stringify(argsJSON)}`).toString('base64');
@@ -20,5 +20,9 @@ export async function preloadQueryCached<Query extends FunctionReference<"query"
       console.log('caching', key);
       cacheTag(key);
       cacheLife('weeks')
-      return preloaded;
+      const renderedAt = new Date().toISOString();
+      return {
+        preloaded,
+        renderedAt,
+      };
   }
