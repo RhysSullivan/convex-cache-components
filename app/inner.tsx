@@ -66,7 +66,7 @@ export default function Home({
       <div className="flex flex-col gap-4 bg-slate-200 dark:bg-slate-800 p-4 rounded-md">
         <h2 className="text-xl font-bold">{title}</h2>
         <p className="text-sm">Rendered at {renderedAt}</p>
-        <span>You are seeing server side cached data that is then hydrateded & updated on the client</span>
+        <span>You are seeing server side cached data that is then hydrated & updated on the client</span>
         <button
           className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
           onClick={() => {
